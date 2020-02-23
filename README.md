@@ -2,6 +2,8 @@
 
 Demonstrate how to build a todo list app using a backendless setup.
 
+[![Open in GitPod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/marcopeg/hasura-demo)
+
 ---
 
 👉 You can read a more detailed story about the experience of building this here:  
