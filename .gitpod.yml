@@ -1,0 +1,11 @@
+image: marcopeg/gitpod-workspace-hasura
+
+tasks:
+  - name: Hasura
+    command: hasura_start
+
+ports:
+  - port: 5432
+    onOpen: ignore
+  - port: 8080
+    onOpen: open-browser
