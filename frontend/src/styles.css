@@ -1,0 +1,16 @@
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+.homeview-user-names    {
+    font-family: Arial, Helvetica, sans-serif;
+    text-transform: capitalize;
+}
+
+a:link, a:visited {
+  color: black;
+  padding: 14px 25px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}

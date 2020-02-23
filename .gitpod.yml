@@ -3,9 +3,16 @@ image: marcopeg/gitpod-workspace-hasura
 tasks:
   - name: Hasura
     command: hasura_start
+    openIn: right
+  - name: Frontend
+    init: cd frontend && yarn install
+    command: cd frontend && yarn start
+    openIn: right
 
 ports:
   - port: 5432
     onOpen: ignore
   - port: 8080
+    onOpen: open-browser
+  - port: 3000
     onOpen: open-browser
