@@ -1,6 +1,12 @@
 import React from "react";
 import { gql } from "apollo-boost";
 import { useMutation } from "@apollo/react-hooks";
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
+import Grid from "@material-ui/core/Grid";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
 
 const ADD_TODO = gql`
   mutation AddTodo($text: String!) {
@@ -25,10 +31,23 @@ const AddTodo = () => {
   };
 
   return (
-    <form onSubmit={login}>
-      <input type="text" name="text" placeholder="...buy milk" />
-      <button type="submit">Add</button>
-    </form>
+    <Card variant="outlined">
+      <CardContent>
+        <Typography>Create new todo:</Typography>
+        <form onSubmit={login}>
+          <Grid container>
+            <Grid item>
+              <TextField label="todo" name="text" />
+            </Grid>
+            <Grid item>
+              <Button type="submit" variant="contained" color="primary">
+                Add
+              </Button>
+            </Grid>
+          </Grid>
+        </form>
+      </CardContent>
+    </Card>
   );
 };
 
