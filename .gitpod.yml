@@ -17,7 +17,7 @@ tasks:
   - name: Seed
     before: cd seed
     init: yarn install
-    command: yarn start
+    command: HASURA_ENDPOINT=$(gp url 8080) yarn start
     openIn: right
 
 ports:

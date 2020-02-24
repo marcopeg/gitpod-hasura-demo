@@ -57,7 +57,7 @@ const env = envalid.cleanEnv(process.env, {
           columns: ["text"],
           payload: "*"
         },
-        replace: true
+        replace: false
       }
     },
     {
