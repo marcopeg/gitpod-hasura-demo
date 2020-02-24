@@ -4,20 +4,20 @@ tasks:
   - name: Hasura
     command: hasura_start
     openIn: right
-  - name: Frontend
-    before: cd frontend
+  - name: Seed
+    before: cd seed
     init: npm install
-    command: REACT_APP_HASURA_URL=$(gp url 8080) npm start
+    command: HASURA_ENDPOINT=$(gp url 8080) npm start
     openIn: right
   - name: Backend
     before: cd backend
     init: npm install
     command: HASURA_ENDPOINT=$(gp url 8080) npm start
     openIn: right
-  - name: Seed
-    before: cd seed
+  - name: Frontend
+    before: cd frontend
     init: npm install
-    command: HASURA_ENDPOINT=$(gp url 8080) npm start
+    command: REACT_APP_HASURA_URL=$(gp url 8080) npm start
     openIn: right
 
 ports:
