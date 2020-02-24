@@ -12,7 +12,7 @@ tasks:
   - name: Backend
     before: cd backend
     init: yarn install
-    command: text=$(gp url 8080) yarn start
+    command: HASURA_ENDPOINT=$(gp url 8080) yarn start
     openIn: right
 
 ports:
