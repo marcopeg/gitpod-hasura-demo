@@ -6,9 +6,8 @@ import TodoView from "./views/TodoView";
 import "./styles.css";
 
 const client = createApolloClient({
-  httpUrl:
-    "https://8080-a5980606-7e72-4106-b314-8020861e921e.ws-eu01.gitpod.io",
-  wsUrl: "wss://8080-a5980606-7e72-4106-b314-8020861e921e.ws-eu01.gitpod.io",
+  httpUrl: process.env.REACT_APP_HASURA_URL,
+  wsUrl: process.env.REACT_APP_HASURA_URL.replace("http", "ws"),
   token: {}
 });
 
