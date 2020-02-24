@@ -24,7 +24,7 @@ ports:
   - port: 5432
     onOpen: ignore
   - port: 8080
-    onOpen: open-browser
+    onOpen: ignore
   - port: 3000
     onOpen: open-browser
   - port: 4000
