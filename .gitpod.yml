@@ -9,6 +9,11 @@ tasks:
     init: yarn install
     command: REACT_APP_HASURA_URL=$(gp url 8080) yarn start
     openIn: right
+  - name: Backend
+    before: cd backend
+    init: yarn install
+    command: text=$(gp url 8080) yarn start
+    openIn: right
 
 ports:
   - port: 5432
@@ -17,3 +22,5 @@ ports:
     onOpen: open-browser
   - port: 3000
     onOpen: open-browser
+  - port: 4000
+    onOpen: ignore
