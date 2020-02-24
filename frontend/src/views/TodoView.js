@@ -33,6 +33,7 @@ const TodoView = () => {
       variables: { id: todo.id }
     });
 
+  // Transform todods subscription data into a body
   const todoItems = data ? data.todos : [];
   const todoNodes = todoItems.map(todo => (
     <li key={todo.id} onClick={handleDeleteRequest(todo)}>

@@ -1,9 +1,9 @@
 import React from "react";
 import { gql } from "apollo-boost";
 import { useMutation } from "@apollo/react-hooks";
+import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
-import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
@@ -16,10 +16,17 @@ const ADD_TODO = gql`
   }
 `;
 
+const useStyles = makeStyles(theme => ({
+  card: {
+    marginBottom: theme.spacing(2)
+  }
+}));
+
 const AddTodo = () => {
+  const classes = useStyles();
   const [addTodo] = useMutation(ADD_TODO);
 
-  const login = evt => {
+  const handleFormSubmit = evt => {
     evt.preventDefault();
     // Trigger the update
     const text = evt.target.elements.text.value;
@@ -31,23 +38,17 @@ const AddTodo = () => {
   };
 
   return (
-    <Card variant="outlined">
-      <CardContent>
-        <Typography>Create new todo:</Typography>
-        <form onSubmit={login}>
-          <Grid container>
-            <Grid item>
-              <TextField label="todo" name="text" />
-            </Grid>
-            <Grid item>
-              <Button type="submit" variant="contained" color="primary">
-                Add
-              </Button>
-            </Grid>
-          </Grid>
-        </form>
-      </CardContent>
-    </Card>
+    <form onSubmit={handleFormSubmit}>
+      <Card variant="outlined" className={classes.card}>
+        <CardContent>
+          <Typography>New Todo:</Typography>
+          <TextField fullWidth placeholder="buy milk..." name="text" />
+        </CardContent>
+      </Card>
+      <Button type="submit" color="primary" variant="contained">
+        Save
+      </Button>
+    </form>
   );
 };
 

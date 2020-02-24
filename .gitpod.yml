@@ -6,7 +6,7 @@ tasks:
     openIn: right
   - name: Frontend
     init: cd frontend && yarn install
-    command: cd frontend && yarn start
+    command: cd frontend && REACT_APP_HASURA_URL=$(gp url 8080) yarn start
     openIn: right
 
 ports:
