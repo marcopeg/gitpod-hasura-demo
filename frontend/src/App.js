@@ -2,7 +2,7 @@ import React from "react";
 import { ApolloProvider } from "@apollo/react-hooks";
 import { ThemeProvider, useTheme } from "@material-ui/core/styles";
 import { createApolloClient } from "./lib/create-apollo-client";
-import TodoView from "./views/TodoView";
+import TodoView from "./containers/TodoView";
 import "./styles.css";
 
 const client = createApolloClient({
