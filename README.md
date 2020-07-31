@@ -39,7 +39,7 @@ create a new todo:
 
 - PostgreSQL (database)
 - Hasura (GraphQL Backend)
-- NodeJS Seeder Service (seeds the db and the Hasura settings)
+- Hasura Migrations CLI (seeds the db and the Hasura settings)
 - String uppercasing NodeJS (detached backend)
 - Webpack (frontend server)
 

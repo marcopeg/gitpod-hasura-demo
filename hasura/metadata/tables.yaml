@@ -1,0 +1,16 @@
+- table:
+    schema: public
+    name: todos
+  event_triggers:
+  - name: todos-capitalize
+    definition:
+      enable_manual: false
+      insert:
+        payload: '*'
+        columns:
+        - text
+    retry_conf:
+      num_retries: 0
+      interval_sec: 10
+      timeout_sec: 60
+    webhook: http://localhost:4000
