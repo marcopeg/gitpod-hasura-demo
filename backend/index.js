@@ -51,8 +51,6 @@ fastify.route({
       }
     });
 
-    console.log(res.data)
-
     return `+OK ${res.data.update_todos.affected_rows}`;
   }
 });
