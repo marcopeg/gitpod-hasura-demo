@@ -7,8 +7,8 @@ services:
   backend:
     container_name: backend
     image: node:12.2-alpine
-    # ports:
-    #   - "${BACKEND_PORT:-4000}:4000"
+    ports:
+      - "${BACKEND_PORT:-4000}:4000"
     volumes:
       - ./docker-data/backend/node_modules:/usr/src/app/node_modules:cached
       - ./backend/package.json:/usr/src/app/package.json:delegated
@@ -22,23 +22,25 @@ services:
       test: ["CMD", "wget", "-qO", "-", "http://backend:4000/ping"]
       interval: 10s
       timeout: 5s
-      retries: 12
+      retries: 20
 
-  # frontend:
-  #   container_name: frontend
-  #   image: node:12.2-alpine
-  #   ports:
-  #     - "${FRONTEND_PORT:-3000}:3000"
-  #   volumes:
-  #     - ./docker-data/frontend/node_modules:/usr/src/app/node_modules:cached
-  #     - ./frontend/package.json:/usr/src/app/package.json:delegated
-  #     - ./frontend/package-lock.json:/usr/src/app/package-lock.json:delegated
-  #     - ./frontend/public:/usr/src/app/public:delegated
-  #     - ./frontend/src:/usr/src/app/src:delegated
-  #   environment:
-  #     REACT_APP_HASURA_URL: http://localhost:8080
-  #   working_dir: /usr/src/app
-  #   entrypoint: ["npm", "run", "compose:start"]
+  frontend:
+    container_name: frontend
+    image: node:12.2-alpine
+    ports:
+      - "${FRONTEND_PORT:-3000}:3000"
+    volumes:
+      - ./docker-data/frontend/node_modules:/usr/src/app/node_modules:cached
+      - ./frontend/package.json:/usr/src/app/package.json:delegated
+      - ./frontend/package-lock.json:/usr/src/app/package-lock.json:delegated
+      - ./frontend/public:/usr/src/app/public:delegated
+      - ./frontend/src:/usr/src/app/src:delegated
+    environment:
+      REACT_APP_HASURA_URL: http://localhost:8080
+    working_dir: /usr/src/app
+    entrypoint: ["npm", "run", "compose:start"]
+    stdin_open: true
+    tty: true
 
   ###
   ### UTILITIES
@@ -84,7 +86,7 @@ services:
       test: ["CMD", "wget", "-qO", "-", "http://hasura:8080/healthz"]
       interval: 5s
       timeout: 5s
-      retries: 5
+      retries: 20
 
   adminer:
     container_name: adminer
@@ -95,13 +97,15 @@ services:
         condition: service_healthy
     links:
       - postgres:db
+    ports:
+      - "${ADMINER_PORT:-8081}:8080"
 
   postgres:
     container_name: postgres
     image: postgres:12
     restart: always
-    # ports:
-    #   - "${PG_PORT:-5432}:5432"
+    ports:
+      - "${PG_PORT:-5432}:5432"
     volumes:
       - ./docker-data/pg:/var/lib/postgresql/data
     environment:
@@ -110,4 +114,4 @@ services:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 20

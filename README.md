@@ -7,7 +7,7 @@ If you are eager to see it in action for free, just click the following button:
 
 [![Open in GitPod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/marcopeg/gitpod-hasura-demo)
 
-And watch this gif-video to figure out what to expect (roughly):
+And while you wait for the system to initialize, watch this gif-video to figure out what to expect (roughly):
 
 ![GitPod Hasura Demo](./gitpod-hasura-demo.gif)
 
@@ -59,17 +59,15 @@ older (and likely simpler) setups.
 ## Quick Start with Docker
 
 If you prefer to run the application locally, you should clone the repo and then simply
-run `docker-compose up`.
+run `docker-compose up` in order to gain:
 
-The backend will run on port `8080`.  
-You can then easily enter the Hasura's console.
+- Postgres > `postgres://postgres:postgres@localhost:5432/postgres`
+- Hasura console > http://localhost:8080
+- Postgres admin tool > http://localhost8081
+- NodeJS Backend > http://localhost:4000
+- CRA Frontend > http://localhost:3000
 
-The frontend should run locally with NodeJS as the implementation through Docker may
-be quite slow.
-
-```bash
-cd frontend && npm i && npm start
-```
+> Running Webpack in Docker is quite a hassle, I strongly suggest to run `make start` in order to run the entire backend in Docker, but let the host's NodeJS run Webpack and the client app
 
 Enjoy,
 Marco
