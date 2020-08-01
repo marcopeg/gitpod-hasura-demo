@@ -1,8 +1,12 @@
 image: marcopeg/gitpod-workspace-hasura:1.3.0
 
 tasks:
+  # Hasura Engine
+  #
   - name: Hasura
-    command: bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:4000/ping)" != "200" ]]; do sleep 1; done' && hasura_start
+    command:
+      bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:4000/ping)" != "200" ]]; do sleep 1; done'
+      && hasura_start
     openIn: right
   - name: Migrations
     before: cd hasura
