@@ -51,7 +51,9 @@ fastify.route({
       }
     });
 
-    return `+OK ${res.data.update_users.affected_rows}`;
+    console.log(res.data)
+
+    return `+OK ${res.data.update_todos.affected_rows}`;
   }
 });
 

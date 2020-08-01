@@ -2,26 +2,43 @@ image: marcopeg/gitpod-workspace-hasura:1.3.0
 
 tasks:
   # Hasura Engine
-  #
+  # =============
   - name: Hasura
-    command:
-      bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:4000/ping)" != "200" ]]; do sleep 1; done'
-      && hasura_start
+    command: hasura_start
     openIn: right
-  - name: Migrations
-    before: cd hasura
-    init: bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:8080/v1/version)" != "200" ]]; do sleep 1; done' && hasura migrate apply && hasura metadata apply && hasura seeds apply
-    openIn: right
+
+  # Backend Process
+  # ===============
+  # it is used to perform triggered based transformations on the todos
+  # after they are created.
   - name: Backend
     before: cd backend
     init: npm install
     command: HASURA_ENDPOINT=$(gp url 8080) npm start
     openIn: right
+
+  # Frontend Process
+  # ================
+  # it runs the CreateReactApp setup that consumes Hasura Engine's API.
   - name: Frontend
     before: cd frontend
     init: npm install
     command: REACT_APP_HASURA_URL=$(gp url 8080) npm start
     openIn: right
+
+  # Hasura Migrations
+  # =================
+  # it pings Hasura Engine to make sure the instance is correctly running
+  # then it runs SQL migrations, Hasura Engine schema, and seed data.
+  - name: Migrations
+    before: cd hasura
+    init:
+      bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:8080/v1/version)" != "200" ]]; do sleep 1; done'
+      && hasura migrate apply
+      && hasura metadata apply
+      && hasura seeds apply
+    openIn: bottom
+    openMode: tab-after
 
 ports:
   - port: 5432
@@ -29,8 +46,15 @@ ports:
   - port: 8080
     onOpen: ignore
   - port: 3000
-    onOpen: open-browser
+    onOpen: open-preview
   - port: 4000
     onOpen: ignore
   - port: 8008
     onOpen: ignore
+
+vscode:
+  extensions:
+    - dbaeumer.vscode-eslint@2.1.1:DO6k4GCpqhwZcKo+jY9xjQ==
+    - esbenp.prettier-vscode@3.20.0:37/f4uBlE287wUjENFq1aA==
+    - mikestead.dotenv@1.0.1:SSXjr5hZcbqSF7nMIhTNnA==
+    - wayou.vscode-todo-highlight@1.0.4:8IqxuxCVol2WnScJc5xVzg==
