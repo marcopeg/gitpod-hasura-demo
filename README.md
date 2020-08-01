@@ -22,7 +22,7 @@ https://marcopeg.com/2020/hasura-in-gitpod
 
 ---
 
-## Kickoff
+## Quick Start with GitPod
 
 When you click on the "Open in GitPod" button, a new _workspace_ is
 being created (you may need to grant access via GitHub) and this
@@ -55,6 +55,21 @@ possible to achieve a "one click startup" environment thanks to
 On top of it, this repository is also a personal starting point for other
 fast-prototyping projects, check out the release versions to try out
 older (and likely simpler) setups.
+
+## Quick Start with Docker
+
+If you prefer to run the application locally, you should clone the repo and then simply
+run `docker-compose up`.
+
+The backend will run on port `8080`.  
+You can then easily enter the Hasura's console.
+
+The frontend should run locally with NodeJS as the implementation through Docker may
+be quite slow.
+
+```bash
+cd frontend && npm i && npm start
+```
 
 Enjoy,
 Marco
