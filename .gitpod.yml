@@ -4,7 +4,7 @@ tasks:
   # Hasura Engine
   # =============
   - name: Hasura
-    command: EVT_TODOS_CAPITALIZE_URL=http://localhost4000
+    command: EVT_TODOS_CAPITALIZE_URL=http://localhost:4000
       hasura_start
     openIn: right
 

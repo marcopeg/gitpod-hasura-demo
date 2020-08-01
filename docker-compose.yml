@@ -7,8 +7,8 @@ services:
   backend:
     container_name: backend
     image: node:12.2-alpine
-    ports:
-      - "${BACKEND_PORT:-4000}:4000"
+    # ports:
+    #   - "${BACKEND_PORT:-4000}:4000"
     volumes:
       - ./docker-data/backend/node_modules:/usr/src/app/node_modules:cached
       - ./backend/package.json:/usr/src/app/package.json:delegated
@@ -86,12 +86,22 @@ services:
       timeout: 5s
       retries: 5
 
+  adminer:
+    container_name: adminer
+    image: adminer:4.7
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+    links:
+      - postgres:db
+
   postgres:
     container_name: postgres
     image: postgres:12
     restart: always
-    ports:
-      - "${PG_PORT:-5432}:5432"
+    # ports:
+    #   - "${PG_PORT:-5432}:5432"
     volumes:
       - ./docker-data/pg:/var/lib/postgresql/data
     environment:
