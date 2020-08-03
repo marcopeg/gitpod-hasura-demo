@@ -11,7 +11,7 @@
     "nodemon": "^2.0.4"
   },
   "scripts": {
-    "start": "./node_modules/.bin/nodemon ./index.js",
+    "start": "./node_modules/.bin/nodemon -L ./index.js",
     "compose:start": "npm i && ./node_modules/.bin/nodemon ./index.js"
   }
 }
