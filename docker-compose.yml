@@ -14,12 +14,14 @@ services:
       - ./backend/package.json:/usr/src/app/package.json:delegated
       - ./backend/package-lock.json:/usr/src/app/package-lock.json:delegated
       - ./backend/index.js:/usr/src/app/index.js:delegated
+      - ./backend/feature-capitalize.js:/usr/src/app/feature-capitalize.js:delegated
     environment:
+      PORT: 4000
       HASURA_ENDPOINT: http://hasura:8080
     working_dir: /usr/src/app
     entrypoint: ["npm", "run", "compose:start"]
     healthcheck:
-      test: ["CMD", "wget", "-qO", "-", "http://backend:4000/ping"]
+      test: ["CMD", "wget", "-qO", "-", "http://backend:4000/healthz"]
       interval: 10s
       timeout: 5s
       retries: 20

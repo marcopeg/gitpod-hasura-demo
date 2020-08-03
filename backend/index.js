@@ -1,74 +1,49 @@
 /**
  * This is a super small webhook microservice.
  * It offers a simple REST interface that can receive a payload.
- * It does one simple action.
- * It uses GraphQL to communicate back to Hasura.
+ *
+ * It does one simple action:
+ * it uses GraphQL to communicate back to Hasura.
+ *
+ * This example uses services composition from the @ForrestJS project:
+ * https://forrestjs.github.io/
  */
 
+const { runHookApp } = require("@forrestjs/hooks");
+const serviceApollo = require("@forrestjs/service-apollo");
+const serviceFastify = require("@forrestjs/service-fastify");
+const serviceFastifyHealthz = require("@forrestjs/service-fastify-healthz");
+const serviceFastifyApollo = require("@forrestjs/service-fastify-apollo");
 const envalid = require("envalid");
-const fastify = require("fastify")({ logger: false });
-const ApolloClient = require("apollo-boost").default;
-const gql = require("graphql-tag");
-require("cross-fetch/polyfill");
+const featureCapitalize = require("./feature-capitalize");
 
-// Validate Environment
+// Validate Environment:
 const env = envalid.cleanEnv(process.env, {
-  PORT: envalid.port({ default: 4000 }),
   HASURA_ENDPOINT: envalid.url(),
   HASURA_TOKEN: envalid.str({ default: "" })
 });
 
-const SERVER_PORT = env.PORT;
-
-// GraphQL Client
-const apollo = new ApolloClient({
-  uri: `${env.HASURA_ENDPOINT}/v1/graphql`,
-  headers: {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${env.HASURA_TOKEN}`
-  }
-});
-
-const UPDATE_TODO_TEXT = gql`
-  mutation updateTodoText($id: Int!, $text: String!) {
-    update_todos(where: { id: { _eq: $id } }, _set: { text: $text }) {
-      affected_rows
-    }
-  }
-`;
-
-fastify.route({
-  method: "POST",
-  url: "/",
-  handler: async req => {
-    const { id, text } = req.body.event.data.new;
-
-    const res = await apollo.mutate({
-      mutation: UPDATE_TODO_TEXT,
-      variables: {
-        id,
-        text: text[0].toUpperCase() + text.slice(1)
+// Setup the App's capabilities as composition of services:
+runHookApp({
+  trace: "compact",
+  settings: {
+    apollo: {
+      client: {
+        config: {
+          uri: `${env.HASURA_ENDPOINT}/v1/graphql`,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${env.HASURA_TOKEN}`
+          }
+        }
       }
-    });
-
-    return `+OK ${res.data.update_todos.affected_rows}`;
-  }
+    }
+  },
+  services: [
+    serviceApollo,
+    serviceFastify,
+    serviceFastifyHealthz,
+    serviceFastifyApollo
+  ],
+  features: [featureCapitalize]
 });
-
-// Status check route
-fastify.route({
-  method: "GET",
-  url: "/ping",
-  handler: async () => "pong"
-});
-
-// Boot
-(async () => {
-  try {
-    const address = await fastify.listen(SERVER_PORT, "::");
-    fastify.log.info(`running on ${address}`);
-  } catch (err) {
-    fastify.log.error(err);
-    process.exit(1);
-  }
-})();

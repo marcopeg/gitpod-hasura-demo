@@ -4,8 +4,7 @@ tasks:
   # Hasura Engine
   # =============
   - name: Hasura
-    command: EVT_TODOS_CAPITALIZE_URL=http://localhost:4000
-      hasura_start
+    command: EVT_TODOS_CAPITALIZE_URL=http://localhost:4000 hasura_start
     openIn: right
 
   # Backend Process
@@ -15,7 +14,7 @@ tasks:
   - name: Backend
     before: cd backend
     init: npm install
-    command: HASURA_ENDPOINT=$(gp url 8080) npm start
+    command: HASURA_ENDPOINT=$(gp url 8080) PORT=4000 npm start
     openIn: right
 
   # Frontend Process
@@ -29,12 +28,14 @@ tasks:
 
   # Hasura Migrations
   # =================
-  # it pings Hasura Engine to make sure the instance is correctly running
+  # it pings Hasura Engine to make sure the instance is correctly running,
+  # then it pings the backend to make sure it's all good as well.
   # then it runs SQL migrations, Hasura Engine schema, and seed data.
   - name: Migrations
     before: cd migrations
     init:
-      bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:8080/v1/version)" != "200" ]]; do sleep 1; done'
+      bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:8080/v1/version)" != "200" ]]; do sleep 5; done'
+      && bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:4000/healthz)" != "200" ]]; do sleep 5; done'
       && hasura migrate apply
       && hasura metadata apply
       && hasura seeds apply
