@@ -4,7 +4,11 @@ tasks:
   # Hasura Engine
   # =============
   - name: Hasura
-    command: EVT_TODOS_CAPITALIZE_URL=http://localhost:4000 hasura_start
+    command: HASURA_GRAPHQL_ADMIN_SECRET="gitpod-hasura-demo"
+      HASURA_GRAPHQL_JWT_SECRET="{\"type\":\"HS256\",\"key\":\"h2leOvdgjwpV0As5L8rZlV3VDVOsOmwk\"}"
+      HASURA_GRAPHQL_UNAUTHORIZED_ROLE="anonymous"
+      EVT_TODOS_CAPITALIZE_URL=http://localhost:4000
+      hasura_start
     openIn: right
 
   # Backend Process
@@ -14,7 +18,10 @@ tasks:
   - name: Backend
     before: cd backend
     init: npm install
-    command: HASURA_ENDPOINT=$(gp url 8080) PORT=4000 npm start
+    command: PORT=4000
+      HASURA_ENDPOINT=$(gp url 8080)
+      HASURA_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE0MTYyMzkwMjIsImV4cCI6NzUxNjIzOTAyMiwiaHR0cHM6Ly9oYXN1cmEuaW8vand0L2NsYWltcyI6eyJ4LWhhc3VyYS1hbGxvd2VkLXJvbGVzIjpbImJhY2tlbmQiXSwieC1oYXN1cmEtZGVmYXVsdC1yb2xlIjoiYmFja2VuZCJ9fQ.epNPoNjKtvmgompkJnb4my7kZYF-muUu_HzKSeu6siM
+      npm start
     openIn: right
 
   # Frontend Process

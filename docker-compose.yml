@@ -18,6 +18,7 @@ services:
     environment:
       PORT: 4000
       HASURA_ENDPOINT: http://hasura:8080
+      HASURA_TOKEN: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE0MTYyMzkwMjIsImV4cCI6NzUxNjIzOTAyMiwiaHR0cHM6Ly9oYXN1cmEuaW8vand0L2NsYWltcyI6eyJ4LWhhc3VyYS1hbGxvd2VkLXJvbGVzIjpbImJhY2tlbmQiXSwieC1oYXN1cmEtZGVmYXVsdC1yb2xlIjoiYmFja2VuZCJ9fQ.epNPoNjKtvmgompkJnb4my7kZYF-muUu_HzKSeu6siM
     working_dir: /usr/src/app
     entrypoint: ["npm", "run", "compose:start"]
     healthcheck:
@@ -31,6 +32,8 @@ services:
     image: node:12.2-alpine
     ports:
       - "${FRONTEND_PORT:-3000}:3000"
+      - "${FRONTEND_PORT_WS:-35729}:35729"
+
     volumes:
       - ./docker-data/frontend/node_modules:/usr/src/app/node_modules:cached
       - ./frontend/package.json:/usr/src/app/package.json:delegated
@@ -39,6 +42,7 @@ services:
       - ./frontend/src:/usr/src/app/src:delegated
     environment:
       REACT_APP_HASURA_URL: http://localhost:8080
+      CHOKIDAR_USEPOLLING: "true"
     working_dir: /usr/src/app
     entrypoint: ["npm", "run", "compose:start"]
     stdin_open: true
@@ -81,8 +85,11 @@ services:
       - "${HASURA_PORT:-8080}:8080"
     environment:
       HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
-      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "false"
       HASURA_GRAPHQL_DEV_MODE: "true"
+      HASURA_GRAPHQL_ADMIN_SECRET: "gitpod-hasura-demo"
+      HASURA_GRAPHQL_JWT_SECRET: '{"type":"HS256", "key": "h2leOvdgjwpV0As5L8rZlV3VDVOsOmwk"}'
+      HASURA_GRAPHQL_UNAUTHORIZED_ROLE: "anonymous"
       EVT_TODOS_CAPITALIZE_URL: http://backend:4000
     healthcheck:
       test: ["CMD", "wget", "-qO", "-", "http://hasura:8080/healthz"]
