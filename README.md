@@ -69,5 +69,16 @@ run `docker-compose up` in order to gain:
 
 > Running Webpack in Docker is quite a hassle, I strongly suggest to run `make start` in order to run the entire backend in Docker, but let the host's NodeJS run Webpack and the client app
 
+## A Word on Security
+
+This repository is a work in progress meant to provide a starting point to play
+with Hasura and its data lifecycle best-practices.
+
+The Hasura instance is secured with an admin secret to exploit the possibility
+of the `anonymous` role in describing how to access data via GraphQL.
+
+The backend service uses a custom JWT token generated on jwt.io (that expires in
+a few hundreds years) to perform the data transformation activities.
+
 Enjoy,
 Marco
